@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo1</title>
+	<style>
+	body{
+		
+		margin: 0px;
+		padding: 0px;
+		height: 630px;
+		font-family: "微软雅黑";
+		background: black;	
+	}
+	#wind{
+		width: 900px;
+		height: 600px;
+		margin-left: 200px;
+		background: pink;
+		position: relative;
+	}
+	#it{
+		position: absolute;
+		width: 50px;
+		height: 50px;
+		left: 420px;
+		top: 100px;
+		border-radius: 25px;
+		background: green;
+		opacity: 1;
+	}
+	</style>
+</head>
+<body>
+<div id="wind">
+	<div id="it">		
+	</div>
+</div>
+	<script>
+	window.onload=function(){
+		var aBody=document.getElementById('wind');
+		var aDiv=document.getElementById('it');
+		var aDivx=0;
+		var aDivy=0;
+		var arr=[];
+		var bBt=true;
+		aDiv.onmousedown=function(ev){
+			var ev=ev||window.event;
+			aDivx=ev.clientX-aDiv.offsetLeft;
+			aDivy=ev.clientY-aDiv.offsetTop;
+			speed0=ev.clientX;
+			speed1=ev.clientY;
+			document.onmousemove=function(ev){
+				var ev=ev||window.event;			
+                aDiv.style.left=ev.clientX-aDivx+'px';
+                aDiv.style.top=ev.clientY-aDivy+'px';
+            speedX=ev.clientX-speed0;
+            speedY=ev.clientY-speed1;
+            speed0=ev.clientX;
+            speed1=ev.clientY;       
+			}
+			document.onmouseup=function(){
+              document.onmousemove=null;
+               move();              
+			}
+		}
+		function move(){
+		   var aDivX=aDiv.offsetLeft;
+               var aDivY=aDiv.offsetTop; 
+              if (aDivY<aBody.offsetHeight-aDiv.offsetHeight) {
+              	 var speed=speedY;
+              	 var speedXX=speedX; 
+                 var timer=null;
+               clearInterval(timer);
+               timer=setInterval(function(){
+              	aDiv.style.top=aDiv.offsetTop+speed+'px';
+                aDiv.style.left=aDiv.offsetLeft+speedXX+'px';
+                speed+=6;   
+               	if (aDiv.offsetTop>=aBody.offsetHeight-aDiv.offsetHeight) 
+               	{
+               		aDiv.style.top=aBody.offsetHeight-aDiv.offsetHeight+'px';
+               		speed*=-1;
+               		speed*=0.5;
+               		speedXX*=0.75;		
+               	}else if(aDiv.offsetTop<=0){
+                   aDiv.style.top=0+'px';
+               		speed*=-1;
+               		speed*=1.5;
+               		speedXX*=0.8;
+               	}
+               	if (aDiv.offsetLeft<=0) 
+               	{
+               		aDiv.style.left=0+'px';
+               		speedXX*=-1;
+               		speedXX*=0.8; 
+               	}else if(aDiv.offsetLeft>=aBody.offsetWidth-50){
+               		aDiv.style.left=aBody.offsetWidth-50+'px';
+               		speedXX*=-1;
+               		speedXX*=0.75;
+               	}
+                if (aDiv.offsetTop==aBody.offsetHeight-aDiv.offsetHeight&&speed>-10) {
+                	speed=0;
+                	if(Math.abs(speedXX)<=1){
+                		clearInterval(timer);
+                	}
+                }
+               },100);
+              }
+	}
+	}
+	</script>
+</body>
+</html>
